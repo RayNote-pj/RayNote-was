@@ -11,10 +11,9 @@ import com.project.lay_note_was.lay_note.provider.JwtProvider;
 import com.project.lay_note_was.lay_note.repository.UserRepository;
 import com.project.lay_note_was.lay_note.service.AuthService;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.util.InternalException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -37,21 +36,20 @@ public class AuthServiceImplement implements AuthService {
         if (!userEmail.matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
             return ResponseDto.setFailed(ResponseMessage.VALIDATION_FAIL + "userEmail");
         }
-
         if (!userName.matches("^[A-Za-z가-힣]{2,16}$")) {
-            return ResponseDto.setFailed(ResponseMessage.VALIDATION_FAIL + "userEmail");
+            return ResponseDto.setFailed(ResponseMessage.VALIDATION_FAIL + "userName");
         }
 
         if (!nickName.matches("^[A-Za-z가-힣0-9._]{2,14}$")) {
-            return ResponseDto.setFailed(ResponseMessage.VALIDATION_FAIL + "userEmail");
+            return ResponseDto.setFailed(ResponseMessage.VALIDATION_FAIL + "nickName");
         }
 
         if (!userPhone.matches("010\\d{8}$")) {
-            return ResponseDto.setFailed(ResponseMessage.VALIDATION_FAIL + "userEmail");
+            return ResponseDto.setFailed(ResponseMessage.VALIDATION_FAIL + "userPhone");
         }
 
-        if (!password.matches("^(?=.[A-Z])(?=.[a-z])(?=.\\d)(?=.[!@#$%^&*(),.?\":{}|<>]).{8,16}$")) {
-            return ResponseDto.setFailed(ResponseMessage.VALIDATION_FAIL + "userEmail");
+        if (!password.matches("^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!@#$%^&*(),.?\":{}|<>]).{8,16}$")) {
+            return ResponseDto.setFailed(ResponseMessage.VALIDATION_FAIL + "password");
         }
 
         if (!password.equals(confirmPassword)) {
@@ -92,7 +90,8 @@ public class AuthServiceImplement implements AuthService {
         String password = dto.getPassword();
 
         try {
-           User user = userRepository.findUser(userEmail);
+           User user = userRepository.findByUserEmail(userEmail)
+                   .orElseThrow(() -> new InternalException(ResponseMessage.NOT_EXIST_USER));
             if (user == null) {
                 return ResponseDto.setFailed(ResponseMessage.EXIST_DATA);
             }

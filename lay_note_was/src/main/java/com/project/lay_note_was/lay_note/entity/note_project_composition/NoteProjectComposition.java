@@ -15,11 +15,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class NoteProjectComposition {
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "note_composition_id", columnDefinition = "CHAR(36)")
     private String noteCompositionId;
 
     @ManyToOne
-    @MapsId("noteProjectId")
     @JoinColumn(name = "note_project_id", columnDefinition = "CHAR(36)")
     private NoteProject noteProject;
 

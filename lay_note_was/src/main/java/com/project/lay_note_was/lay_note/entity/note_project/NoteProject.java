@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 @Builder(toBuilder = true)
 public class NoteProject {
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "note_project_id", columnDefinition = "CHAR(36)")
     private String noteProjectId;
 
@@ -22,7 +23,6 @@ public class NoteProject {
     private String noteProjectImageUrl;
 
     @ManyToOne
-    @MapsId("noteProjectOwnerId")
     @JoinColumn(name = "note_project_owner_id", nullable = false)
     private User user;
 

@@ -13,11 +13,6 @@ public interface UserRepository extends JpaRepository<User, String> {
 
     Optional<User> findByUserEmail(String userEmail);
 
-    @Query("""
-    SELECT u FROM User u WHERE u.userEmail = :userEmail
-""")
-    User findUser (@Param("userEmail") String userEmail);
-
     boolean existsByUserEmail(String userEmail);
 
     boolean existsByNickName(String nickName);

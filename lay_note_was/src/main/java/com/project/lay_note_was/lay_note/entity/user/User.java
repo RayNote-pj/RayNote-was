@@ -13,6 +13,7 @@ import lombok.*;
 @Builder(toBuilder = true)
 public class User {
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "user_id", columnDefinition = "CHAR(36)")
     private String userId;
 
@@ -26,7 +27,7 @@ public class User {
     @Column(name = "user_name", nullable = false)
     private String userName;
 
-    @Column(name = "user_nickname", nullable = false)
+    @Column(name = "nick_name", nullable = false)
     private String nickName;
 
     @Column(name = "user_phone", nullable = false)
@@ -34,4 +35,5 @@ public class User {
 
     @Column(name = "profile_image_url", nullable = false)
     private String profileImageUrl;
+
 }

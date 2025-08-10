@@ -64,7 +64,7 @@ public class JwtProvider {
 
     public String getUserEmailFromJwt (String token) {
         Claims claims = getClaims(token);
-        return claims.get("username", String.class);
+        return claims.get("userEmail", String.class);
     }
 
     public String getNickNameFromJwt(String token) {
@@ -74,7 +74,7 @@ public class JwtProvider {
 
     public String getProfileImageUrlFromJwt(String token) {
         Claims claims = getClaims(token);
-        return claims.get("nickName", String.class);
+        return claims.get("profileImageUrl", String.class);
     }
 
     public boolean isValidToken(String token) {
