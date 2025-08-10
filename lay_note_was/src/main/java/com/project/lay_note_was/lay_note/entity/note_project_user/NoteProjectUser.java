@@ -16,14 +16,14 @@ public class NoteProjectUser {
     @EmbeddedId
     private NoteProjectUserId id;
 
-    @ManyToOne
     @MapsId("noteProjectId")
-    @JoinColumn(name = "note_project_id", columnDefinition = "CHAR(36)")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "note_project_id", columnDefinition = "CHAR(36)", nullable = false)
     private NoteProject noteProject;
 
-    @ManyToOne
     @MapsId("userId")
-    @JoinColumn(name = "note_project_owner_id", columnDefinition = "CHAR(36)")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", columnDefinition = "CHAR(36)", nullable = false)
     private User user;
 
     @Column(name = "note_project_image_url", nullable = false)

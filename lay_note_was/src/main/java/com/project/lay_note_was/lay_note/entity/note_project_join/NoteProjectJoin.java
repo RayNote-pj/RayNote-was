@@ -16,16 +16,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class NoteProjectJoin {
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "note_project_join_id", columnDefinition = "CHAR(36)")
     private String noteProjectJoinId;
 
     @ManyToOne
-    @MapsId("noteProjectId")
     @JoinColumn(name = "note_project_id", columnDefinition = "CHAR(36)")
     private NoteProject noteProject;
 
     @ManyToOne
-    @MapsId("userId")
     @JoinColumn(name = "note_project_owner_id", columnDefinition = "CHAR(36)")
     private User user;
 
