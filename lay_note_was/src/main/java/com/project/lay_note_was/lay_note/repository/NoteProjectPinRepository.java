@@ -8,7 +8,7 @@ import java.util.List;
 
 @Repository
 public interface NoteProjectPinRepository extends JpaRepository<NoteProjectPin, String> {
-    List<NoteProjectPin> findByUser_UserEmail(String userEmail);
+    List<NoteProjectPin> findByUser_UserEmailOrderByNoteProject_UpdatedAtDesc(String userEmail);
 
     NoteProjectPin findByPinId(String pinId);
 }

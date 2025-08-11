@@ -31,7 +31,7 @@ public class NoteProjectPinServiceImplement implements NoteProjectPinService {
     @Override
     public ResponseDto<PinListResponseDto> getPinAll(String userEmail) {
         try {
-            List<NoteProjectPin> noteProjectPin = noteProjectPinRepository.findByUser_UserEmail(userEmail);
+            List<NoteProjectPin> noteProjectPin = noteProjectPinRepository.findByUser_UserEmailOrderByNoteProject_UpdatedAtDesc(userEmail);
             List<PinDto> response = noteProjectPin.stream()
                     .map(PinDto::new)
                     .toList();

@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PinDto {
+    private String pinId;
     private String noteProjectId;
     private String noteProjectImageUrl;
     private String noteProjectOwnerId;
@@ -20,6 +21,7 @@ public class PinDto {
     private LocalDateTime deletedAt;
 
     public PinDto(NoteProjectPin noteProjectPin) {
+        this.pinId = noteProjectPin.getPinId();
         this.noteProjectId = noteProjectPin.getNoteProject().getNoteProjectId();
         this.noteProjectImageUrl = noteProjectPin.getNoteProject().getNoteProjectImageUrl();
         this.noteProjectOwnerId = noteProjectPin.getNoteProject().getUser().getUserId();
