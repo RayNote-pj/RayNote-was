@@ -5,6 +5,7 @@ public class ApiMappingPattern {
     public static final String USER = "/api/v1/users";
     public static final String NOTE_PROJECT = "/api/v1/note-projects";
     public static final String NOTE_PROJECT_USER = "/api/v1/note-project-users";
+    public static final String NOTE_PROJECT_PIN = "/api/v1/note-project-pins";
     public static final String NOTE_PROJECT_JOIN = "/api/v1/note-project-joins";
     public static final String NOTE_PROJECT_COMPOSITION = "/api/v1/note-project-compositions";
     public static final String NOTE_BOX = "/api/v1/note-box";

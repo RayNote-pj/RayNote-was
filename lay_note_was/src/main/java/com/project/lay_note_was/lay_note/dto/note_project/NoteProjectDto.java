@@ -28,4 +28,6 @@ public class NoteProjectDto {
         this.updatedAt = noteProject.getUpdatedAt();
         this.deletedAt = noteProject.getDeletedAt();
     }
+
+
 }
