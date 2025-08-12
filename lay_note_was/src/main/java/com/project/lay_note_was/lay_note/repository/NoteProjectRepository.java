@@ -28,4 +28,6 @@ public interface NoteProjectRepository extends JpaRepository<NoteProject, String
     ORDER BY np.deletedAt DESC
 """)
     List<NoteProject> WasteFindByUser_UserEmail(@Param("userEmail") String userEmail);
+
+    NoteProject findByNoteProjectId(String noteProjectId);
 }
