@@ -14,9 +14,9 @@ import lombok.NoArgsConstructor;
 @Data
 public class NoteProjectUserId {
 
-    @Column(name = "user_id", columnDefinition = "CHAR(36)")
+    @Column(name = "user_id", columnDefinition = "CHAR(36)", nullable = false)
     private String userId;
 
-    @Column(name = "note_project_id", columnDefinition = "CHAR(36)")
+    @Column(name = "note_project_id", columnDefinition = "CHAR(36)", nullable = false)
     private String noteProjectId;
 }

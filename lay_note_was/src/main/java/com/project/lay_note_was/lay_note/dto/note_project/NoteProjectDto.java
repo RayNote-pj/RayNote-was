@@ -1,6 +1,7 @@
 package com.project.lay_note_was.lay_note.dto.note_project;
 
 import com.project.lay_note_was.lay_note.entity.note_project.NoteProject;
+import com.project.lay_note_was.lay_note.entity.note_project_user.NoteProjectUser;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -28,6 +29,4 @@ public class NoteProjectDto {
         this.updatedAt = noteProject.getUpdatedAt();
         this.deletedAt = noteProject.getDeletedAt();
     }
-
-
 }

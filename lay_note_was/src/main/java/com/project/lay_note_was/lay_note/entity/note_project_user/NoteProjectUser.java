@@ -26,9 +26,7 @@ public class NoteProjectUser {
     @JoinColumn(name = "user_id", columnDefinition = "CHAR(36)", nullable = false)
     private User user;
 
-    @Column(name = "note_project_image_url", nullable = false)
-    private String noteProjectImageUrl;
-
+    @Enumerated(EnumType.STRING)
     @Column(name = "user_role", nullable = false)
     private UserRole userRole;
 
