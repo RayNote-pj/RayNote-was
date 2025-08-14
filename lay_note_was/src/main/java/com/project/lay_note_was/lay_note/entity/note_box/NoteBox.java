@@ -21,8 +21,8 @@ public class NoteBox {
     private String noteBoxTitle;
 
     @Column(name = "note_box_content")
-    private Long noteBoxContent;
+    private String noteBoxContent;
 
     @Column(name = "image_url")
-    private Long imageUrl;
+    private String imageUrl;
 }

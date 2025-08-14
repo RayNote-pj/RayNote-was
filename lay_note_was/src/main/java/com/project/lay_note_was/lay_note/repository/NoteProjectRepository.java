@@ -29,5 +29,5 @@ public interface NoteProjectRepository extends JpaRepository<NoteProject, String
 """)
     List<NoteProject> WasteFindByUser_UserEmail(@Param("userEmail") String userEmail);
 
-    NoteProject findByNoteProjectId(String noteProjectId);
+    Optional<NoteProject> findByNoteProjectId(String noteProjectId);
 }

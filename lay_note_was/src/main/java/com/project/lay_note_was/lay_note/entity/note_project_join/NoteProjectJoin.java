@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @Entity
 @Table(name = "note_project_joins")
@@ -28,6 +30,13 @@ public class NoteProjectJoin {
     @JoinColumn(name = "note_project_owner_id", columnDefinition = "CHAR(36)")
     private User user;
 
-    @Column(name = "join_status", nullable = false)
+    @Enumerated(EnumType.STRING)
+    @Column(name = "join_status", nullable = false, insertable = false)
     private JoinStatus joinStatus;
+
+    @Column(name = "CREATED_AT", insertable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "DECIDED_AT", insertable = false)
+    private LocalDateTime decidedAt;
 }
