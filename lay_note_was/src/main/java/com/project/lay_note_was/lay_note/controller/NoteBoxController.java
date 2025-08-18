@@ -8,6 +8,7 @@ import com.project.lay_note_was.lay_note.dto.note_box.response.NoteBoxListRespon
 import com.project.lay_note_was.lay_note.dto.note_box.response.NoteBoxResponseDto;
 import com.project.lay_note_was.lay_note.security.PrincipalUser;
 import com.project.lay_note_was.lay_note.service.NoteBoxService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

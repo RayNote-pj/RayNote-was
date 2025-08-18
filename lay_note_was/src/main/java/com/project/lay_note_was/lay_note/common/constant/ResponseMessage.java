@@ -17,7 +17,6 @@ public class ResponseMessage {
 
     public static final String DUPLICATED_USER_EMAIL = "Duplicated userEmail.";
     public static final String DUPLICATED_NICKNAME = "Duplicated NickName.";
-    public static final String DUPLICATED_REVIEW = "Duplicated review.";
 
     public static final String SIGN_IN_FAIL = "Sign in failed.";
     public static final String AUTHENTICATION_FAIL = "Authentication failed.";
@@ -36,5 +35,7 @@ public class ResponseMessage {
     public static final String FAIL_TO_CONVERT = "Fail to convert";
 
     public static final String NOTE_PROJECT_TRASH = "Move to Trash.";
+    public static final String NOT_NOTE_PROJECT_MEMBER = "Not project member.";
+
 
 }

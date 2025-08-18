@@ -11,6 +11,6 @@ public class ApiMappingPattern {
     public static final String NOTE_BOX = "/api/v1/note-box";
     public static final String NOTE_IMAGE_BOX = "/api/v1/note-image-box";
     public static final String NOTE_LIST = "/api/v1/note-list";
-    public static final String NOTE_LIST_ITEM = "/api/v1/note-list-item";
+    public static final String NOTE_LIST_ITEM = "/api/v1/note-list-items";
     public static final String MAIL = "/api/v1/mail";
 }
