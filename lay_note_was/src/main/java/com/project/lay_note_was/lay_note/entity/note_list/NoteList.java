@@ -1,10 +1,13 @@
 package com.project.lay_note_was.lay_note.entity.note_list;
 
+import com.project.lay_note_was.lay_note.entity.note_list_item.NoteListItem;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
 @Data
@@ -20,4 +23,7 @@ public class NoteList {
 
     @Column(name = "note_list_title")
     private String noteListTitle;
+
+    @OneToMany(mappedBy = "noteList", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<NoteListItem> noteListItems;
 }

@@ -2,12 +2,14 @@ package com.project.lay_note_was.lay_note.entity.note_image_box;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Data
 @Table(name = "note_image_boxs")
+@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 public class NoteImageBox {
@@ -17,8 +19,12 @@ public class NoteImageBox {
     private Long noteImageBoxId;
 
     @Column(name = "image_caption")
-    private Long imageCaption;
+    private String imageCaption;
 
     @Column(name = "image_url")
-    private Long imageUrl;
+    private String imageUrl;
+
+    @ManyToOne
+    @JoinColumn(name = "note_image_box_List_id", nullable = false)
+    private NoteImageBoxList noteImageBoxList;
 }

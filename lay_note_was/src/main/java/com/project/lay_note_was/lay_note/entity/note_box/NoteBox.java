@@ -2,14 +2,16 @@ package com.project.lay_note_was.lay_note.entity.note_box;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Data
-@Table(name = "note_boxs")
+@Table(name = "note_boxes")
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class NoteBox {
 
     @Id
