@@ -70,6 +70,7 @@ public class NoteImageBoxListServiceImplement implements NoteImageBoxListService
             if(!(projectUser.getUserRole() == UserRole.OWNER || projectUser.getUserRole() == UserRole.MEMBER)) {
                 return ResponseDto.setFailed(ResponseMessage.NO_PERMISSION);
             }
+
             List<NoteImageBoxList> noteImageBoxList = noteImageBoxListRepository.findAllByUserEmailAndCompositionId(userEmail, noteProjectId, NoteComponentType.NOTEIMAGEBOX);
             List<NoteImageBoxListDto> imageBoxListDtoList = noteImageBoxList.stream()
                     .map(list -> {
@@ -98,9 +99,19 @@ public class NoteImageBoxListServiceImplement implements NoteImageBoxListService
     @Override
     public ResponseDto<Void> deleteImageBoxList(String userEmail, String noteProjectId, Long noteImageBoxListId) {
         try {
+            NoteProjectUser projectUser = noteProjectUserRepository.findByUser_UserEmailAndNoteProject_NoteProjectId(userEmail, noteProjectId)
+                    .orElseThrow(() -> new IllegalArgumentException(ResponseMessage.NOT_EXIST_USER));
+            if(!(projectUser.getUserRole() == UserRole.OWNER || projectUser.getUserRole() == UserRole.MEMBER)) {
+                return ResponseDto.setFailed(ResponseMessage.NO_PERMISSION);
+            }
+
+            NoteProjectComposition composition = noteProjectCompositionRepository.findByComponentTypeAndTargetIdAndNoteProject_noteProjectId(NoteComponentType.NOTELIST, noteImageBoxListId, noteProjectId).orElseThrow(() -> new IllegalArgumentException(ResponseMessage.NOT_EXIST_DATA + "noteProjectComposition"));
+
             List<NoteImageBox> imageBoxes = noteImageBoxRepository.findAllByNoteImageBoxList_NoteImageBoxListId(noteImageBoxListId);
             NoteImageBoxList noteImageBoxList = noteImageBoxListRepository.findByNoteImageBoxListId(noteImageBoxListId)
                     .orElseThrow(() -> new IllegalArgumentException(ResponseMessage.NOT_EXIST_DATA + "noteImageBoxList"));
+
+            noteProjectCompositionRepository.delete(composition);
             noteImageBoxRepository.deleteAll(imageBoxes);
             noteImageBoxListRepository.delete(noteImageBoxList);
 

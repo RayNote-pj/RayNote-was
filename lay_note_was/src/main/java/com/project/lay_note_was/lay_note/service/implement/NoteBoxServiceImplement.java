@@ -134,8 +134,12 @@ public class NoteBoxServiceImplement implements NoteBoxService {
                 return ResponseDto.setFailed(ResponseMessage.NO_PERMISSION);
             }
 
+            NoteProjectComposition composition = noteProjectCompositionRepository.findByComponentTypeAndTargetIdAndNoteProject_noteProjectId(NoteComponentType.NOTELIST, noteBoxId, noteProjectId).orElseThrow(() -> new IllegalArgumentException(ResponseMessage.NOT_EXIST_DATA + "noteProjectComposition"));
+
             NoteBox noteBox = noteBoxRepository.findById(noteBoxId)
                     .orElseThrow(() -> new IllegalArgumentException(ResponseMessage.NOT_EXIST_DATA + "noteBox"));
+
+            noteProjectCompositionRepository.delete(composition);
             noteBoxRepository.delete(noteBox);
             return ResponseDto.setSuccess(ResponseMessage.SUCCESS, null);
         } catch (IllegalArgumentException e) {

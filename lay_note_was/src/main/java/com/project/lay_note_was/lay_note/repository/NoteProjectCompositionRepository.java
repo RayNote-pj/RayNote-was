@@ -17,4 +17,15 @@ public interface NoteProjectCompositionRepository extends JpaRepository<NoteProj
     WHERE c.noteComponentType = :noteComponentType AND c.noteComponentId = :noteListId
 """)
     Optional<NoteProjectComposition> findByComponentTypeAndTargetId(@Param("noteComponentType") NoteComponentType noteComponentType, @Param("noteListId") Long targetId);
+
+    @Query("""
+    SELECT c FROM NoteProjectComposition c
+    WHERE c.noteComponentType = :noteComponentType 
+    AND c.noteComponentId = :noteListId
+    AND c.noteProject.noteProjectId = :noteProjectId
+""")
+    Optional<NoteProjectComposition> findByComponentTypeAndTargetIdAndNoteProject_noteProjectId(
+            @Param("noteComponentType") NoteComponentType noteComponentType,
+            @Param("noteListId") Long noteListId,
+            @Param("noteProjectId") String noteProjectId);
 }
