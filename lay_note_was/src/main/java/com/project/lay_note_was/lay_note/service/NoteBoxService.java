@@ -7,11 +7,11 @@ import com.project.lay_note_was.lay_note.dto.note_box.response.NoteBoxListRespon
 import com.project.lay_note_was.lay_note.dto.note_box.response.NoteBoxResponseDto;
 
 public interface NoteBoxService {
-    ResponseDto<NoteBoxResponseDto> createNoteBox(String userEmail, NoteBoxCreateRequestDto dto);
+    ResponseDto<NoteBoxResponseDto> createNoteBox(String userEmail, String noteProjectId, NoteBoxCreateRequestDto dto);
 
-    ResponseDto<NoteBoxResponseDto> updateNoteBox(String userEmail, NoteBoxUpdateRequestDto dto, Long noteBoxId);
+    ResponseDto<NoteBoxResponseDto> updateNoteBox(String userEmail, String noteProjectId, NoteBoxUpdateRequestDto dto, Long noteBoxId);
 
-    ResponseDto<NoteBoxListResponseDto> getNoteBox(String userEmail);
+    ResponseDto<NoteBoxListResponseDto> getNoteBox(String userEmail, String noteProjectId);
 
-    ResponseDto<Void> deleteNoteBox(String userEmail, Long noteBoxId);
+    ResponseDto<Void> deleteNoteBox(String userEmail, String noteProjectId, Long noteBoxId);
 }

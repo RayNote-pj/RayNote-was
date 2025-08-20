@@ -24,10 +24,10 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class NoteListServiceImplement implements NoteListService {
-    private final NoteListItemRepository noteListItemRepository;
     private final NoteListRepository noteListRepository;
     private final NoteProjectUserRepository noteProjectUserRepository;
     private final NoteProjectCompositionRepository noteProjectCompositionRepository;
+    private final NoteListItemRepository noteListItemRepository;
 
     @Transactional
     @Override
@@ -70,7 +70,15 @@ public class NoteListServiceImplement implements NoteListService {
 
             List<NoteList> noteList = noteListRepository.findByUserEmailAndCompositionId(userEmail, noteProjectId, NoteComponentType.NOTELIST);
             List<NoteListDto> noteListDto = noteList.stream()
-                    .map(NoteListDto::new)
+                    .map(list -> {
+                        List<NoteListItemDto> notes = noteListItemRepository
+                                .findAllByNoteList_NoteListId(list.getNoteListId())
+                                .stream()
+                                .map(NoteListItemDto::new)
+                                .toList();
+
+                        return new NoteListDto(list, notes);
+                    })
                     .toList();
             NoteListResponseDto data = new NoteListResponseDto(noteListDto);
 

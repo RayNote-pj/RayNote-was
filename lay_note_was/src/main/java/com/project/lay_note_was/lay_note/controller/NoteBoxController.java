@@ -8,7 +8,6 @@ import com.project.lay_note_was.lay_note.dto.note_box.response.NoteBoxListRespon
 import com.project.lay_note_was.lay_note.dto.note_box.response.NoteBoxResponseDto;
 import com.project.lay_note_was.lay_note.security.PrincipalUser;
 import com.project.lay_note_was.lay_note.service.NoteBoxService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,18 +20,19 @@ import org.springframework.web.bind.annotation.*;
 public class NoteBoxController {
     private final NoteBoxService noteBoxService;
 
-    private final String POST = "/create";
-    private final String PUT = "/{noteBoxId}/update";
-    private final String DELETE = "/{noteBoxId}/delete";
-    private final String GET = "/all";
+    private final String POST = "/{noteProjectId}/create";
+    private final String PUT = "/{noteProjectId}/update/{noteBoxId}";
+    private final String DELETE = "/{noteProjectId}/delete/{noteBoxId}";
+    private final String GET = "/{noteProjectId}/all";
 
     @PostMapping(POST)
     public ResponseEntity<ResponseDto<NoteBoxResponseDto>> createNoteBox (
             @AuthenticationPrincipal PrincipalUser principalUser,
+            @PathVariable String noteProjectId,
             @RequestBody NoteBoxCreateRequestDto dto
     ) {
         String userEmail = principalUser.getUsername();
-        ResponseDto<NoteBoxResponseDto> response = noteBoxService.createNoteBox(userEmail, dto);
+        ResponseDto<NoteBoxResponseDto> response = noteBoxService.createNoteBox(userEmail, noteProjectId, dto);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
         return ResponseEntity.status(status).body(response);
     }
@@ -40,32 +40,35 @@ public class NoteBoxController {
     @PutMapping(PUT)
     public ResponseEntity<ResponseDto<NoteBoxResponseDto>> updateNoteBox (
             @AuthenticationPrincipal PrincipalUser principalUser,
+            @PathVariable String noteProjectId,
             @RequestBody NoteBoxUpdateRequestDto dto,
             @PathVariable Long noteBoxId
     ) {
         String userEmail = principalUser.getUsername();
-        ResponseDto<NoteBoxResponseDto> response = noteBoxService.updateNoteBox(userEmail, dto, noteBoxId);
+        ResponseDto<NoteBoxResponseDto> response = noteBoxService.updateNoteBox(userEmail, noteProjectId, dto, noteBoxId);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
         return ResponseEntity.status(status).body(response);
     }
 
     @GetMapping(GET)
     public ResponseEntity<ResponseDto<NoteBoxListResponseDto>> getNoteBox (
-            @AuthenticationPrincipal PrincipalUser principalUser
+            @AuthenticationPrincipal PrincipalUser principalUser,
+            @PathVariable String noteProjectId
     ) {
         String userEmail = principalUser.getUsername();
-        ResponseDto<NoteBoxListResponseDto> response = noteBoxService.getNoteBox(userEmail);
+        ResponseDto<NoteBoxListResponseDto> response = noteBoxService.getNoteBox(userEmail, noteProjectId);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
         return ResponseEntity.status(status).body(response);
     }
 
     @DeleteMapping(DELETE)
-    public ResponseEntity<ResponseDto<Void>> delteNoteBox (
+    public ResponseEntity<ResponseDto<Void>> deleteNoteBox (
             @AuthenticationPrincipal PrincipalUser principalUser,
+            @PathVariable String noteProjectId,
             @PathVariable Long noteBoxId
     ) {
         String userEmail = principalUser.getUsername();
-        ResponseDto<Void>response = noteBoxService.deleteNoteBox(userEmail, noteBoxId);
+        ResponseDto<Void>response = noteBoxService.deleteNoteBox(userEmail, noteProjectId, noteBoxId);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
         return ResponseEntity.status(status).body(response);
     }

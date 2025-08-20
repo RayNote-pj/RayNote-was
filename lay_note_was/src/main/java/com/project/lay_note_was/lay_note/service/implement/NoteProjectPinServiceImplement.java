@@ -48,7 +48,8 @@ public class NoteProjectPinServiceImplement implements NoteProjectPinService {
         try {
             User user = userRepository.findByUserEmail(userEmail)
                     .orElseThrow(() -> new IllegalArgumentException(ResponseMessage.NOT_EXIST_USER));
-            NoteProject noteProject = noteProjectRepository.findByNoteProjectId(noteProjectId);
+            NoteProject noteProject = noteProjectRepository.findByNoteProjectId(noteProjectId)
+                    .orElseThrow(() -> new IllegalArgumentException(ResponseMessage.NOT_EXIST_DATA + "noteProject"));
             NoteProjectPin noteProjectPin = NoteProjectPin.builder()
                     .noteProject(noteProject)
                     .user(user)

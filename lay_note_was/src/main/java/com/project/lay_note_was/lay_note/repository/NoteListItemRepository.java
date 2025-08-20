@@ -33,4 +33,6 @@ public interface NoteListItemRepository extends JpaRepository<NoteListItem, Long
             @Param("noteListItemId") Long noteListItemId,
             @Param("componentType") NoteComponentType componentType
     );
+
+    Optional<NoteListItem> findAllByNoteList_NoteListId(Long noteListId);
 }

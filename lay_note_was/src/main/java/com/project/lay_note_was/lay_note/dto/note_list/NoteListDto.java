@@ -15,11 +15,9 @@ public class NoteListDto {
     private String noteListTitle;
     private List<NoteListItemDto> noteListItemDto;
 
-    public NoteListDto(NoteList noteList) {
-        this.noteListId = noteList.getNoteListId();
-        this.noteListTitle = noteList.getNoteListTitle();
-        this.noteListItemDto = noteList.getNoteListItems().stream()
-                .map(NoteListItemDto::new)
-                .toList();
+    public NoteListDto(NoteList list, List<NoteListItemDto> notes) {
+        this.noteListId = list.getNoteListId();
+        this.noteListTitle = list.getNoteListTitle();
+        this.noteListItemDto = notes;
     }
 }

@@ -6,7 +6,6 @@ import com.project.lay_note_was.lay_note.dto.note_list.request.NoteListItemReque
 import com.project.lay_note_was.lay_note.dto.note_list.response.NoteListItemResponseDto;
 import com.project.lay_note_was.lay_note.security.PrincipalUser;
 import com.project.lay_note_was.lay_note.service.NoteListItemService;
-import com.project.lay_note_was.lay_note.service.NoteListService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
