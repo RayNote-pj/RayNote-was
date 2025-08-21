@@ -40,12 +40,12 @@ public class NoteListServiceImplement implements NoteListService {
             NoteList noteList = NoteList.builder()
                     .noteListTitle(dto.getNoteListTitle())
                     .build();
+            noteListRepository.save(noteList);
             NoteProjectComposition composition = NoteProjectComposition.builder()
                     .noteProject(projectUser.getNoteProject())
                     .noteComponentType(NoteComponentType.NOTELIST)
                     .noteComponentId(noteList.getNoteListId())
                     .build();
-            noteListRepository.save(noteList);
             noteProjectCompositionRepository.save(composition);
 
             NoteListOneResponseDto data = new NoteListOneResponseDto(noteList);
@@ -54,6 +54,7 @@ public class NoteListServiceImplement implements NoteListService {
         } catch (IllegalArgumentException e) {
             return ResponseDto.setFailed(e.getMessage());
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
         }
     }

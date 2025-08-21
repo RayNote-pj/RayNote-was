@@ -51,6 +51,7 @@ public class NoteImageBoxListServiceImplement implements NoteImageBoxListService
                     .noteComponentType(NoteComponentType.NOTEIMAGEBOX)
                     .build();
             noteProjectCompositionRepository.save(composition);
+
             NoteImageBoxListOneResponseDto data = new NoteImageBoxListOneResponseDto(noteImageBoxList.getNoteImageBoxListId());
 
             return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);

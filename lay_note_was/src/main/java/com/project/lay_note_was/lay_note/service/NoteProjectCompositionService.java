@@ -6,12 +6,12 @@ import com.project.lay_note_was.lay_note.dto.note_project_composition.request.Co
 import com.project.lay_note_was.lay_note.dto.note_project_composition.request.CompositionSizeRequestDto;
 import com.project.lay_note_was.lay_note.dto.note_project_composition.response.CompositionResponseDto;
 
+import java.util.List;
+
 public interface NoteProjectCompositionService {
-    ResponseDto<CompositionResponseDto> createComposition(String userEmail, String noteProjectId, Long targetId, CompositionRequestDto dto);
+    ResponseDto<List<CompositionResponseDto>> getComposition(String userEmail, String noteProjectId);
 
-    ResponseDto<CompositionResponseDto> getComposition(String userEmail, String noteProjectId);
+    ResponseDto<CompositionResponseDto> updateSizeComposition(String userEmail, String noteCompositionId, Long noteComponentId, String noteProjectId, CompositionSizeRequestDto dto);
 
-    ResponseDto<CompositionResponseDto> updateSizeComposition(String userEmail, String noteComponentId, CompositionSizeRequestDto dto);
-
-    ResponseDto<CompositionResponseDto> updatePositionComposition(String userEmail, String noteComponentId, CompositionPositionRequestDto dto);
+    ResponseDto<CompositionResponseDto> updatePositionComposition(String userEmail, String noteCompositionId, Long noteComponentId, String noteProjectId, CompositionPositionRequestDto dto);
 }
