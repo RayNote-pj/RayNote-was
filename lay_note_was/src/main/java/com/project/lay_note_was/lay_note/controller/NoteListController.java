@@ -22,7 +22,8 @@ public class NoteListController {
     private final String POST = "/{noteProjectId}/create";
     private final String GET = "/{noteProjectId}/all";
     private final String PUT = "/{noteProjectId}/update/{noteListId}";
-    private final String DELETE_NOTE_LIST = "/delete/{noteListId}";
+    private final String DELETE_NOTE_LIST = "{noteProjectId}/delete/{noteListId}";
+
     @PostMapping(POST)
     public ResponseEntity<ResponseDto<NoteListOneResponseDto>> crateNoteList (
             @AuthenticationPrincipal PrincipalUser principalUser,
@@ -62,10 +63,11 @@ public class NoteListController {
     @DeleteMapping(DELETE_NOTE_LIST)
     public ResponseEntity<ResponseDto<Void>> deleteNoteList (
             @AuthenticationPrincipal PrincipalUser principalUser,
+            @PathVariable String noteProjectId,
             @PathVariable Long noteListId
     ) {
         String userEmail = principalUser.getUsername();
-        ResponseDto<Void> response = noteListService.deleteNoteList(userEmail, noteListId);
+        ResponseDto<Void> response = noteListService.deleteNoteList(userEmail, noteListId, noteProjectId);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
         return ResponseEntity.status(status).body(response);
     }

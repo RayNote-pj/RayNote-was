@@ -8,7 +8,6 @@ import com.project.lay_note_was.lay_note.dto.note_list.request.NoteListRequestDt
 import com.project.lay_note_was.lay_note.dto.note_list.response.NoteListOneResponseDto;
 import com.project.lay_note_was.lay_note.dto.note_list.response.NoteListResponseDto;
 import com.project.lay_note_was.lay_note.entity.note_list.NoteList;
-import com.project.lay_note_was.lay_note.entity.note_list_item.NoteListItem;
 import com.project.lay_note_was.lay_note.entity.note_project_composition.NoteComponentType;
 import com.project.lay_note_was.lay_note.entity.note_project_composition.NoteProjectComposition;
 import com.project.lay_note_was.lay_note.entity.note_project_user.NoteProjectUser;
@@ -41,12 +40,12 @@ public class NoteListServiceImplement implements NoteListService {
             NoteList noteList = NoteList.builder()
                     .noteListTitle(dto.getNoteListTitle())
                     .build();
+            noteListRepository.save(noteList);
             NoteProjectComposition composition = NoteProjectComposition.builder()
                     .noteProject(projectUser.getNoteProject())
                     .noteComponentType(NoteComponentType.NOTELIST)
                     .noteComponentId(noteList.getNoteListId())
                     .build();
-            noteListRepository.save(noteList);
             noteProjectCompositionRepository.save(composition);
 
             NoteListOneResponseDto data = new NoteListOneResponseDto(noteList);
@@ -55,6 +54,7 @@ public class NoteListServiceImplement implements NoteListService {
         } catch (IllegalArgumentException e) {
             return ResponseDto.setFailed(e.getMessage());
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
         }
     }
@@ -117,20 +117,21 @@ public class NoteListServiceImplement implements NoteListService {
 
     @Transactional
     @Override
-    public ResponseDto<Void> deleteNoteList(String userEmail, Long noteListId) {
+    public ResponseDto<Void> deleteNoteList(String userEmail, Long noteListId, String noteProjectId) {
         try {
-            NoteList noteList = noteListRepository.findById(noteListId)
-                    .orElseThrow(() -> new IllegalArgumentException(ResponseMessage.NOT_EXIST_DATA));
-
-            NoteProjectComposition composition = noteProjectCompositionRepository.findByComponentTypeAndTargetId(NoteComponentType.NOTELIST, noteListId).orElseThrow(() -> new IllegalArgumentException(ResponseMessage.NOT_EXIST_DATA + "noteProjectComposition"));
-
-            NoteProjectUser user = noteProjectUserRepository.findByUser_UserEmailAndNoteProject_NoteProjectId(userEmail, composition.getNoteProject().getNoteProjectId())
+            NoteProjectUser projectUser = noteProjectUserRepository.findByUser_UserEmailAndNoteProject_NoteProjectId(userEmail, noteProjectId)
                     .orElseThrow(() -> new IllegalArgumentException(ResponseMessage.NOT_NOTE_PROJECT_MEMBER));
 
-            if (!(user.getUserRole() == UserRole.OWNER || user.getUserRole() == UserRole.MEMBER)) {
+            if(!(projectUser.getUserRole() == UserRole.OWNER || projectUser.getUserRole() == UserRole.MEMBER)) {
                 return ResponseDto.setFailed(ResponseMessage.NO_PERMISSION);
             }
 
+            NoteList noteList = noteListRepository.findById(noteListId)
+                    .orElseThrow(() -> new IllegalArgumentException(ResponseMessage.NOT_EXIST_DATA));
+
+            NoteProjectComposition composition = noteProjectCompositionRepository.findByComponentTypeAndTargetIdAndNoteProject_noteProjectId(NoteComponentType.NOTELIST, noteListId, noteProjectId).orElseThrow(() -> new IllegalArgumentException(ResponseMessage.NOT_EXIST_DATA + "noteProjectComposition"));
+
+            noteProjectCompositionRepository.delete(composition);
             noteListRepository.delete(noteList);
             return ResponseDto.setSuccess(ResponseMessage.SUCCESS, null);
         } catch (IllegalArgumentException e) {
