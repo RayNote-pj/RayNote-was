@@ -60,14 +60,19 @@ public class NoteProjectJoinServiceImplement implements NoteProjectJoinService {
     public ResponseDto<NoteProjectJoinResponseDto> changeJoinStatus(String userEmail, String noteProjectJoinId, JoinStatus joinStatus, UserRole role) {
         try {
             NoteProjectJoin noteProjectJoin = noteProjectJoinRepository.findByNoteProjectJoinId(noteProjectJoinId)
-                    .orElseThrow(null);
+                    .orElseThrow(() -> new IllegalArgumentException(ResponseMessage.NOT_EXIST_DATA));
+
             if (noteProjectJoin == null) return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_DATA +"noteProjectJoin");
+
             User projectOwner = userRepository.findByUserEmail(userEmail)
-                            .orElse(null);
+                    .orElseThrow(() -> new IllegalArgumentException(ResponseMessage.NOT_EXIST_DATA));
+
             if (projectOwner == null) return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_DATA +"projectOwner");
+
             String projectId = noteProjectJoin.getNoteProject().getNoteProjectId();
             NoteProjectUserId projectOwnerId = new NoteProjectUserId(projectOwner.getUserId(), projectId);
             NoteProjectUser ownerLink = noteProjectUserRepository.findById(projectOwnerId).orElse(null);
+
         if (ownerLink == null || ownerLink.getUserRole() != UserRole.OWNER) {
             return ResponseDto.setFailed(ResponseMessage.NO_PERMISSION);
         }
