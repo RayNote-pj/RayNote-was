@@ -40,16 +40,34 @@ public class NoteProjectJoinServiceImplement implements NoteProjectJoinService {
                     .orElseThrow(() -> new IllegalArgumentException(ResponseMessage.NOT_EXIST_USER));
             NoteProject noteProject = noteProjectRepository.findByNoteProjectId(noteProjectId)
                     .orElseThrow(() -> new IllegalArgumentException(ResponseMessage.NOT_EXIST_DATA + "noteProject"));
+
+            boolean alreadyMember = noteProjectUserRepository.findByUser_UserEmailAndNoteProject_NoteProjectId(userEmail, noteProjectId)
+                    .isPresent();
+
+            if (alreadyMember) {
+                return ResponseDto.setFailed(ResponseMessage.ALREADY_NOTE_PROJECT_MEMBER);
+            }
+
+            boolean alreadyPending = noteProjectJoinRepository.findByNoteProject_NoteProjectIdAndUser_UserEmailAndJoinStatus(
+                    noteProjectId, userEmail, JoinStatus.PENDING).isPresent();
+
+            if (alreadyPending) {
+                return ResponseDto.setFailed(ResponseMessage.ALREADY_REQUEST);
+            }
+
             NoteProjectJoin noteProjectJoin = NoteProjectJoin.builder()
                     .noteProject(noteProject)
                     .user(user)
                     .createdAt(LocalDateTime.now())
                     .build();
+
             noteProjectJoinRepository.save(noteProjectJoin);
             NoteProjectJoinDto response = new NoteProjectJoinDto(noteProjectJoin);
 
             NoteProjectJoinResponseDto data = new NoteProjectJoinResponseDto(response);
             return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);
+        } catch (IllegalArgumentException e) {
+            return ResponseDto.setFailed(e.getMessage());
         } catch(Exception e) {
             return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
         }
@@ -83,11 +101,37 @@ public class NoteProjectJoinServiceImplement implements NoteProjectJoinService {
             }
             return ResponseDto.setFailed(ResponseMessage.VALIDATION_FAIL);
         }
+
+        if (joinStatus != JoinStatus.APPROVED || joinStatus != JoinStatus.REJECTED) {
+            return ResponseDto.setFailed(ResponseMessage.VALIDATION_FAIL);
+        }
+
+        if (joinStatus == JoinStatus.APPROVED) {
+            UserRole grantRole = role == null ? UserRole.MEMBER : role;
+
+            if (grantRole == UserRole.OWNER) {
+                return ResponseDto.setFailed(ResponseMessage.VALIDATION_FAIL);
+            }
+            NoteProjectUserId memberId = new NoteProjectUserId(noteProjectJoin.getUser().getUserId(), projectId);
+            NoteProjectUser existing = noteProjectUserRepository.findById(memberId).orElse(null);
+            if (existing == null) {
+                NoteProjectUser link = NoteProjectUser.builder()
+                        .noteProject(noteProjectJoin.getNoteProject())
+                        .user(noteProjectJoin.getUser())
+                        .userRole(grantRole)
+                        .build();
+                noteProjectUserRepository.save(link);
+            }
+        }
             noteProjectJoin.setJoinStatus(joinStatus);
+            noteProjectJoin.setDecidedAt(java.time.LocalDateTime.now());
+
             NoteProjectJoinDto response = new NoteProjectJoinDto(noteProjectJoin);
             NoteProjectJoinResponseDto data = new NoteProjectJoinResponseDto(response);
 
             return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);
+        } catch (IllegalArgumentException e) {
+            return ResponseDto.setFailed(e.getMessage());
         } catch(Exception e) {
             return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
         }
